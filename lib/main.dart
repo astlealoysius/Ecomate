@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart'; 
 import 'package:image_picker/image_picker.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
@@ -29,7 +30,7 @@ class _ImageProcessingScreenState extends State<ImageProcessingScreen> {
 
   final GenerativeModel model = GenerativeModel(
     model: 'gemini-1.5-flash',
-    apiKey: 'AIzaSyDxxAf3ehWNFy2hu0BvZblw1If_6M-T02s', // Replace with your actual API key
+    apiKey: dotenv.env['GEMINI_API_KEY'] ?? '', 
   );
 
   Future<void> _pickImage(bool fromCamera) async {

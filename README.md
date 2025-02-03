@@ -1,4 +1,4 @@
-# ecomate_2
+# Ecomate
 
 A new Flutter project.
 
