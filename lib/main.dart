@@ -30,7 +30,7 @@ class _ImageProcessingScreenState extends State<ImageProcessingScreen> {
 
   final GenerativeModel model = GenerativeModel(
     model: 'gemini-1.5-flash',
-    apiKey: dotenv.env['GEMINI_API_KEY'] ?? '', // Load API key from .env file
+    apiKey: dotenv.env['GEMINI_API_KEY'] ?? '', 
   );
 
   Future<void> _pickImage(bool fromCamera) async {
