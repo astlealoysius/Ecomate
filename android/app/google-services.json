@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "172694023486",
+    "project_id": "ecomate-64a5b",
+    "storage_bucket": "ecomate-64a5b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172694023486:android:8ea92e1ed724aa29d0106f",
+        "android_client_info": {
+          "package_name": "com.example.ecomate_2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd2WsNK0uXEpzLKdsCLmTwF05o9MS1spk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
