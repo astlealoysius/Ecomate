@@ -3,13 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'firebase_options.dart';
 import 'screens/map_screen.dart';
 import 'widgets/waste_classifier_card.dart';
 import 'utils/constants.dart';
 import 'screens/scanner_screen.dart';
 import 'screens/chat_screen.dart';
+import 'screens/report_screen.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  
+  // Configure the database URL
+  FirebaseDatabase.instance.databaseURL = 'https://ecomate-64a5b-default-rtdb.firebaseio.com/';
+  
   await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
@@ -186,31 +198,55 @@ class _HomeScreenState extends State<HomeScreen> {
           const MapScreen(isFullScreen: false),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  child: _ActionCard(
-                    icon: Icons.document_scanner,
-                    title: 'Scan Waste',
-                    subtitle: 'Classify and get disposal suggestions',
-                    onTap: _showImagePickerOptions,
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _ActionCard(
+                        icon: Icons.document_scanner,
+                        title: 'Scan Waste',
+                        subtitle: 'Classify and get disposal suggestions',
+                        onTap: _showImagePickerOptions,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: _ActionCard(
+                        icon: Icons.chat_bubble_outline,
+                        title: 'Chat',
+                        subtitle: 'Ask questions about waste management',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ChatScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _ActionCard(
-                    icon: Icons.chat_bubble_outline,
-                    title: 'Chat',
-                    subtitle: 'Ask questions about waste management',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ChatScreen(),
-                        ),
-                      );
-                    },
-                  ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _ActionCard(
+                        icon: Icons.report_problem_outlined,
+                        title: 'Report Dumping',
+                        subtitle: 'Report illegal waste dumping',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ReportScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
