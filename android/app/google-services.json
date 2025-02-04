@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "172694023486",
+    "firebase_url": "https://ecomate-64a5b-default-rtdb.firebaseio.com",
     "project_id": "ecomate-64a5b",
     "storage_bucket": "ecomate-64a5b.firebasestorage.app"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.example.ecomate_2"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "172694023486-f4boik00k7aj9sbd97j2mrb31iqt5p1f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ecomate_2",
+            "certificate_hash": "6ee49097c694ffebf9c500c7f2272ff62e431f73"
+          }
+        },
+        {
+          "client_id": "172694023486-mbl3n3g26q1dp6cqad1umma8rb9bf5uu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDd2WsNK0uXEpzLKdsCLmTwF05o9MS1spk"
@@ -20,7 +34,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "172694023486-mbl3n3g26q1dp6cqad1umma8rb9bf5uu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "172694023486-o9opaeiqvs2p2q16o27q9nf7ecdi5vek.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ecomate2"
+              }
+            }
+          ]
         }
       }
     }

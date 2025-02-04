@@ -5,13 +5,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'screens/map_screen.dart';
+import 'screens/auth_screen.dart';
+import 'screens/profile_screen.dart';
 import 'widgets/waste_classifier_card.dart';
-import 'utils/constants.dart';
+import 'theme/app_theme.dart';
 import 'screens/scanner_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/report_screen.dart';
+import 'services/auth_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,16 +37,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: AppColors.primary,
-        scaffoldBackgroundColor: AppColors.background,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: AppColors.primary,
-          elevation: 0,
-          centerTitle: true,
-        ),
+      theme: AppTheme.lightTheme,
+      home: StreamBuilder<User?>(
+        stream: AuthService().authStateChanges,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          
+          return snapshot.hasData ? const HomeScreen() : const AuthScreen();
+        },
       ),
-      home: const HomeScreen(),
     );
   }
 }
@@ -60,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isProcessing = false;
   final ImagePicker _picker = ImagePicker();
   late final GenerativeModel _model;
+  final _authService = AuthService();
 
   @override
   void initState() {
@@ -145,19 +151,19 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.camera_alt, color: AppColors.primary),
+              leading: Icon(Icons.camera_alt, color: AppTheme.lightTheme.primaryColor),
               title: const Text('Take a Photo'),
               onTap: () {
                 Navigator.pop(context);
-                _openScannerWithImage(ImageSource.camera);
+                _pickImage(ImageSource.camera);
               },
             ),
             ListTile(
-              leading: const Icon(Icons.photo_library, color: AppColors.primary),
+              leading: Icon(Icons.photo_library, color: AppTheme.lightTheme.primaryColor),
               title: const Text('Choose from Gallery'),
               onTap: () {
                 Navigator.pop(context);
-                _openScannerWithImage(ImageSource.gallery);
+                _pickImage(ImageSource.gallery);
               },
             ),
           ],
@@ -184,74 +190,78 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset('assets/logo.png', height: 24),
-            const SizedBox(width: 8),
-            const Text('EcoMate'),
-          ],
-        ),
-      ),
-      body: Column(
-        children: [
-          const MapScreen(isFullScreen: false),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: _ActionCard(
-                        icon: Icons.document_scanner,
-                        title: 'Scan Waste',
-                        subtitle: 'Classify and get disposal suggestions',
-                        onTap: _showImagePickerOptions,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: _ActionCard(
-                        icon: Icons.chat_bubble_outline,
-                        title: 'Chat',
-                        subtitle: 'Ask questions about waste management',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ChatScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _ActionCard(
-                        icon: Icons.report_problem_outlined,
-                        title: 'Report Dumping',
-                        subtitle: 'Report illegal waste dumping',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ReportScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+        title: const Text('EcoMate'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
             ),
           ),
         ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const MapScreen(isFullScreen: false),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _ActionCard(
+                          icon: Icons.document_scanner,
+                          title: 'Scan Waste',
+                          subtitle: 'Classify and get disposal suggestions',
+                          onTap: _showImagePickerOptions,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _ActionCard(
+                          icon: Icons.chat_bubble_outline,
+                          title: 'Chat',
+                          subtitle: 'Ask questions about waste management',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ChatScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _ActionCard(
+                          icon: Icons.report_problem_outlined,
+                          title: 'Report Dumping',
+                          subtitle: 'Report illegal waste dumping',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ReportScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -283,23 +293,23 @@ class _ActionCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 32, color: AppColors.primary),
+              Icon(icon, size: 32, color: AppTheme.lightTheme.primaryColor),
               const SizedBox(height: 12),
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: AppTheme.lightTheme.primaryColor,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 subtitle,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
-                  color: AppColors.textSecondary,
+                  color: AppTheme.lightTheme.primaryColor,
                 ),
               ),
             ],
