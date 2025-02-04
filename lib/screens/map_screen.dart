@@ -1,9 +1,14 @@
+import 'dart:io';  // Add this for Platform
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'dart:math';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
+import '../utils/constants.dart';  // Add this for AppColors
 
 class MapScreen extends StatefulWidget {
   final bool isFullScreen;
@@ -17,24 +22,76 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   LatLng? _currentLocation;
   final MapController _mapController = MapController();
+  List<Map<String, dynamic>> _wasteCenters = [];
+  bool _isLoading = false;
   
-  // Updated waste centers function to generate centers around user location
-  List<Map<String, dynamic>> getWasteCenters(LatLng? baseLocation) {
-    if (baseLocation == null) return [];
-    
-    // Generate some random nearby points
-    return List.generate(5, (index) {
-      final lat = baseLocation.latitude + (Random().nextDouble() - 0.5) * 0.01;
-      final lng = baseLocation.longitude + (Random().nextDouble() - 0.5) * 0.01;
-      
-      return {
-        'name': index % 2 == 0 ? 'Recycling Center ${index + 1}' : 'Waste Collection ${index + 1}',
-        'location': LatLng(lat, lng),
-        'type': index % 2 == 0 ? 'recycling' : 'collection',
-        'distance': '${(Random().nextDouble() * 2).toStringAsFixed(1)}km'
-      };
-    });
+  // Replace getWasteCenters with these methods
+  Future<void> fetchWasteCenters(LatLng location) async {
+    setState(() => _isLoading = true);
+    try {
+      // Overpass API query for recycling and waste facilities
+      final query = """
+      [out:json][timeout:25];
+      (
+        node["amenity"="recycling"](around:5000,${location.latitude},${location.longitude});
+        way["amenity"="recycling"](around:5000,${location.latitude},${location.longitude});
+        node["waste"="disposal"](around:5000,${location.latitude},${location.longitude});
+        way["waste"="disposal"](around:5000,${location.latitude},${location.longitude});
+      );
+      out body;
+      >;
+      out skel qt;
+      """;
+
+      final response = await http.post(
+        Uri.parse('https://overpass-api.de/api/interpreter'),
+        body: query,
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final elements = data['elements'] as List;
+        
+        setState(() {
+          _wasteCenters = elements.where((e) => e['lat'] != null && e['lon'] != null).map((e) {
+            final type = e['tags']?['amenity'] == 'recycling' ? 'recycling' : 'collection';
+            final name = e['tags']?['name'] ?? 
+                        (type == 'recycling' ? 'Recycling Center' : 'Waste Collection');
+            
+            return {
+              'name': name,
+              'location': LatLng(e['lat'].toDouble(), e['lon'].toDouble()),
+              'type': type,
+              'distance': calculateDistance(
+                location.latitude, 
+                location.longitude,
+                e['lat'].toDouble(), 
+                e['lon'].toDouble()
+              ),
+            };
+          }).toList();
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching waste centers: $e');
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
+
+  String calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    const R = 6371; // Earth's radius in kilometers
+    final dLat = _toRad(lat2 - lat1);
+    final dLon = _toRad(lon2 - lon1);
+    final a = sin(dLat/2) * sin(dLat/2) +
+        cos(_toRad(lat1)) * cos(_toRad(lat2)) * 
+        sin(dLon/2) * sin(dLon/2);
+    final c = 2 * atan2(sqrt(a), sqrt(1-a));
+    final d = R * c;
+    return '${d.toStringAsFixed(1)}km';
+  }
+
+  double _toRad(double deg) => deg * pi / 180;
 
   @override
   void initState() {
@@ -52,31 +109,76 @@ class _MapScreenState extends State<MapScreen> {
           _currentLocation = LatLng(position.latitude, position.longitude);
         });
         _mapController.move(_currentLocation!, 15);
+        // Fetch real waste centers once we have location
+        await fetchWasteCenters(_currentLocation!);
       } catch (e) {
         debugPrint('Error getting location: $e');
       }
     }
   }
 
+  Future<void> _openDirections(LatLng destination) async {
+    final lat = destination.latitude;
+    final lng = destination.longitude;
+    
+    // Create map URL
+    final url = Platform.isIOS
+        ? 'https://maps.apple.com/?daddr=$lat,$lng'
+        : 'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng';
+
+    final uri = Uri.parse(url);
+    
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Could not open map application'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('Error launching map: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final wasteCenters = getWasteCenters(_currentLocation);
-    
     return widget.isFullScreen
         ? Scaffold(
             appBar: AppBar(
               title: const Text('Nearby Centers'),
               actions: [
+                if (_isLoading)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    ),
+                  ),
                 IconButton(
                   icon: const Icon(Icons.refresh),
-                  onPressed: _getCurrentLocation,
-                )
+                  onPressed: _currentLocation != null 
+                    ? () => fetchWasteCenters(_currentLocation!)
+                    : null,
+                ),
               ],
             ),
             body: Column(
               children: [
-                Expanded(child: _buildMap(wasteCenters)),
-                _buildCentersList(wasteCenters),
+                Expanded(child: _buildMap(_wasteCenters)),
+                _buildCentersList(_wasteCenters),
               ],
             ),
           )
@@ -99,7 +201,7 @@ class _MapScreenState extends State<MapScreen> {
                   height: 180,
                   child: Stack(
                     children: [
-                      _buildMap(wasteCenters),
+                      _buildMap(_wasteCenters),
                       Positioned(
                         bottom: 8,
                         right: 8,
@@ -206,11 +308,14 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text('Distance: ${center['distance']}'),
-                  TextButton(
-                    onPressed: () {
-                      // TODO: Implement navigation
-                    },
-                    child: const Text('Get Directions'),
+                  TextButton.icon(
+                    onPressed: () => _openDirections(center['location']),
+                    icon: const Icon(Icons.directions),
+                    label: const Text('Directions'),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                    ),
                   ),
                 ],
               ),
