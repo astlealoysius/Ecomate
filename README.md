@@ -1,6 +1,6 @@
 # EcoMate - AI-Powered Waste Management App
 
-EcoMate is a Flutter-based mobile application that helps users manage waste responsibly by providing AI-powered waste classification and location-based recycling services.
+EcoMate is a Flutter-based mobile application that helps users manage waste responsibly by providing AI-powered waste classification, location-based recycling services, and community engagement features.
 
 ## Features
 
@@ -21,21 +21,47 @@ EcoMate is a Flutter-based mobile application that helps users manage waste resp
 - Distance information and directions
 - Expandable map view with facility details
 
+### 3. Waste Report System
+- Report illegal dumping or waste management issues
+- Upload photos with location data
+- Track report status
+- Community-driven waste monitoring
+
+### 4. AI Chat Assistant
+- Interactive chat interface powered by Gemini AI
+- Get instant answers about waste management
+- Learn about recycling best practices
+- Receive eco-friendly tips and advice
+
+### 5. User Profile
+- Personal waste management statistics
+- Report history
+- Contribution tracking
+- Account management
+
 ## Tech Stack
 
 - **Frontend**: Flutter
+- **Backend**: Firebase
+  - Authentication
+  - Realtime Database
+  - Cloud Storage
+  - Cloud Firestore
 - **AI/ML**: Google Gemini API
 - **Maps**: OpenStreetMap with flutter_map
 - **Location Services**: Geolocator
 - **Permissions**: Permission Handler
+- **Image Storage**: Cloudinary
 
 ## Getting Started
 
 ### Prerequisites
-- Flutter SDK (latest stable version)
+- Flutter SDK (>=3.0.0)
 - Dart SDK
 - Android Studio / VS Code
 - Google Gemini API key
+- Firebase project configuration
+- Cloudinary account
 
 ### Installation
 
@@ -49,7 +75,7 @@ git clone https://github.com/yourusername/ecomate.git
 cd ecomate
 ```
 
-3. Create a `.env` file in the root directory and add your Gemini API key:
+3. Create a `.env` file in the root directory and add your API keys:
 ```env
 GEMINI_API_KEY=your_api_key_here
 ```
@@ -59,7 +85,11 @@ GEMINI_API_KEY=your_api_key_here
 flutter pub get
 ```
 
-5. Run the app:
+5. Set up Firebase:
+   - Add your `google-services.json` to `android/app/`
+   - Add your `GoogleService-Info.plist` to `ios/Runner/`
+
+6. Run the app:
 ```bash
 flutter run
 ```
@@ -69,8 +99,10 @@ flutter run
 #### Android Setup
 Add the following permissions to `android/app/src/main/AndroidManifest.xml`:
 ```xml
+<uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.CAMERA" />
 ```
 
 #### iOS Setup
@@ -80,20 +112,29 @@ Add the following keys to `ios/Runner/Info.plist`:
 <string>This app needs access to location to show nearby waste management centers.</string>
 <key>NSLocationAlwaysUsageDescription</key>
 <string>This app needs access to location to show nearby waste management centers.</string>
+<key>NSCameraUsageDescription</key>
+<string>This app needs camera access to capture waste images for classification.</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>This app needs photo library access to upload waste images for classification.</string>
 ```
 
 ## Project Structure
 
 ```
 lib/
+├── main.dart
 ├── screens/
+│   ├── chat_screen.dart
+│   ├── home_screen.dart
 │   ├── map_screen.dart
-│   └── home_screen.dart
-├── widgets/
-│   └── waste_classifier_card.dart
-├── utils/
-│   └── constants.dart
-└── main.dart
+│   ├── profile_screen.dart
+│   └── report_screen.dart
+├── services/
+│   └── firebase_service.dart
+├── theme/
+│   └── app_theme.dart
+└── utils/
+    └── constants.dart
 ```
 
 ## Dependencies
@@ -109,39 +150,22 @@ dependencies:
   latlong2: ^0.9.0
   geolocator: ^11.0.0
   permission_handler: ^11.3.0
+  http: ^1.2.0
+  url_launcher: ^6.2.5
+  firebase_core: ^2.32.0
+  firebase_storage: ^11.6.0
+  firebase_database: ^10.4.0
+  firebase_auth: ^4.17.0
+  cloud_firestore: ^4.14.0
+  google_fonts: ^6.1.0
+  uuid: ^4.2.2
+  cloudinary: ^1.0.0
 ```
-
-## Features in Development
-
-- [ ] Chat interface for waste management queries
-- [ ] Waste collection reminders
-- [ ] Illegal dumping reporting system
-- [ ] User authentication
-- [ ] Offline support
-- [ ] Multi-language support
 
 ## Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Google Gemini API for AI capabilities
-- OpenStreetMap for mapping services
-- Flutter and Dart teams for the amazing framework
-
-## Resources
-
-For help getting started with Flutter development:
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-- [Online documentation](https://docs.flutter.dev/)
-```
+This project is licensed under the MIT License - see the LICENSE file for details.
