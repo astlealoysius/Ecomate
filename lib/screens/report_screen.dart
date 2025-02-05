@@ -62,6 +62,8 @@ class _ReportScreenState extends State<ReportScreen> {
       _currentPosition = await Geolocator.getCurrentPosition();
       if (_selectedPosition == null) {
         _selectedPosition = LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
+        // Move the map to the current location
+        _mapController.move(_selectedPosition!, 15);
       }
       setState(() => _isLoading = false);
     } catch (e) {
