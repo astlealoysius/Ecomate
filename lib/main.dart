@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Take a Photo'),
               onTap: () {
                 Navigator.pop(context);
-                _pickImage(ImageSource.camera);
+                _openScannerWithImage(ImageSource.camera);
               },
             ),
             ListTile(
@@ -163,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Choose from Gallery'),
               onTap: () {
                 Navigator.pop(context);
-                _pickImage(ImageSource.gallery);
+                _openScannerWithImage(ImageSource.gallery);
               },
             ),
           ],
