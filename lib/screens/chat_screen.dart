@@ -4,21 +4,17 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../utils/constants.dart';
 
 class ChatScreen extends StatefulWidget {
-  final String? initialMessage;
-
-  const ChatScreen({
-    Key? key,
-    this.initialMessage,
-  }) : super(key: key);
+  const ChatScreen({super.key});
 
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
   final List<ChatMessage> _messages = [];
   final TextEditingController _textController = TextEditingController();
   late final GenerativeModel _model;
+  bool _isProcessing = false;
 
   @override
   void initState() {
@@ -33,78 +29,47 @@ class _ChatScreenState extends State<ChatScreen> {
         maxOutputTokens: 4096,
       ),
     );
-
-    if (widget.initialMessage != null) {
-      _addMessage(
-        ChatMessage(
-          text: widget.initialMessage!,
-          isUser: false,
-          timestamp: DateTime.now().millisecondsSinceEpoch,
-        ),
-      );
-      _addMessage(
-        ChatMessage(
-          text: "I've analyzed your waste item. What would you like to know more about? I can help with:\n"
-               "• Specific disposal methods\n"
-               "• Recycling alternatives\n"
-               "• Environmental impact\n"
-               "• Local disposal facilities",
-          isUser: false,
-          timestamp: DateTime.now().millisecondsSinceEpoch,
-        ),
-      );
-    }
+    _addWelcomeMessage();
   }
 
-  void _addMessage(ChatMessage message) {
-    setState(() {
-      _messages.add(message);
-    });
-  }
-
-  Future<void> _handleSubmitted(String text) async {
-    if (text.isEmpty) return;
-
-    _textController.clear();
-    _addMessage(
+  void _addWelcomeMessage() {
+    _messages.add(
       ChatMessage(
-        text: text,
-        isUser: true,
-        timestamp: DateTime.now().millisecondsSinceEpoch,
+        content: "Hello! I'm your waste management assistant. Feel free to ask any questions about waste disposal, recycling, or environmental conservation.",
+        isUser: false,
       ),
     );
+  }
+
+  Future<void> _handleUserQuestion(String text) async {
+    if (text.trim().isEmpty) return;
+
+    setState(() {
+      _messages.add(ChatMessage(content: text, isUser: true));
+      _textController.clear();
+      _isProcessing = true;
+    });
 
     try {
-      final prompt = '''
-        Act as an expert waste management AI assistant. The user is asking about: $text
+      final response = await _model.generateContent([
+        Content.text("As a waste management expert, answer this question: $text"),
+      ]);
 
-        Consider the context of any previous waste classification results and provide:
-        1. Direct, practical answers
-        2. Specific disposal instructions if relevant
-        3. Local recycling options when applicable
-        4. Environmental impact information
-        5. Alternative eco-friendly suggestions
-
-        Keep responses clear, actionable, and focused on waste management best practices.
-      ''';
-
-      final response = await _model.generateContent([Content.text(prompt)]);
-      
-      _addMessage(
-        ChatMessage(
-          text: response.text ?? 'I apologize, I could not process your request.',
+      setState(() {
+        _messages.add(ChatMessage(
+          content: response.text ?? 'Could not generate response',
           isUser: false,
-          timestamp: DateTime.now().millisecondsSinceEpoch,
-        ),
-      );
+        ));
+      });
     } catch (e) {
-      _addMessage(
-        ChatMessage(
-          text: 'Sorry, I encountered an error. Please try again.',
-          isUser: false,
-          timestamp: DateTime.now().millisecondsSinceEpoch,
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red[800],
         ),
       );
+    } finally {
+      setState(() => _isProcessing = false);
     }
   }
 
@@ -112,98 +77,97 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('EcoMate Chat'),
+        title: const Text('Waste Management Assistant'),
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(8.0),
-              reverse: true,
+              padding: const EdgeInsets.all(8),
               itemCount: _messages.length,
-              itemBuilder: (_, int index) => _messages[_messages.length - 1 - index],
+              itemBuilder: (context, index) {
+                final message = _messages[index];
+                return _ChatBubble(message: message);
+              },
             ),
           ),
-          const Divider(height: 1.0),
-          Container(
-            decoration: BoxDecoration(color: Theme.of(context).cardColor),
-            child: _buildTextComposer(),
-          ),
+          if (_isProcessing)
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: LinearProgressIndicator(),
+            ),
+          _buildMessageInput(),
         ],
       ),
     );
   }
 
-  Widget _buildTextComposer() {
-    return IconTheme(
-      data: IconThemeData(color: Theme.of(context).colorScheme.secondary),
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          children: [
-            Flexible(
-              child: TextField(
-                controller: _textController,
-                onSubmitted: _handleSubmitted,
-                decoration: const InputDecoration.collapsed(
-                  hintText: 'Ask about waste management',
-                ),
+  Widget _buildMessageInput() {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _textController,
+              decoration: const InputDecoration(
+                hintText: 'Ask a question...',
+                border: InputBorder.none,
               ),
+              onSubmitted: _handleUserQuestion,
             ),
-            IconButton(
-              icon: const Icon(Icons.send),
-              onPressed: () => _handleSubmitted(_textController.text),
-            ),
-          ],
-        ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.send, color: AppColors.primary),
+            onPressed: () => _handleUserQuestion(_textController.text),
+          ),
+        ],
       ),
     );
   }
 }
 
-class ChatMessage extends StatelessWidget {
-  final String text;
+class ChatMessage {
+  final String content;
   final bool isUser;
-  final int timestamp;
 
   ChatMessage({
-    required this.text,
+    required this.content,
     required this.isUser,
-    required this.timestamp,
-    Key? key,
-  }) : super(key: key);
+  });
+}
+
+class _ChatBubble extends StatelessWidget {
+  final ChatMessage message;
+
+  const _ChatBubble({required this.message});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(
-              child: Icon(
-                isUser ? Icons.person : Icons.eco,
-              ),
-            ),
+    return Align(
+      alignment: message.isUser ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: message.isUser ? AppColors.primary : Colors.grey[200],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          message.content,
+          style: TextStyle(
+            color: message.isUser ? Colors.white : Colors.black,
           ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  isUser ? 'You' : 'EcoMate',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 5.0),
-                  child: Text(text),
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
