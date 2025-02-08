@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'dart:math';
 import 'video_lesson_screen.dart';
 import 'quiz_screen.dart';
+import '../services/progress_service.dart';
+import 'progress_screen.dart'; // Import ProgressScreen
 
 class EducationalScreen extends StatefulWidget {
   const EducationalScreen({Key? key}) : super(key: key);
@@ -100,28 +102,208 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Learn & Grow'),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: const [
-            Tab(text: 'Tutorials'),
-            Tab(text: 'Daily Tips'),
-            Tab(text: 'Quizzes'),
-          ],
+  Widget _buildTipCard(String title, String content, IconData icon) {
+    return Card(
+      elevation: 2,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(0.05),
+              Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      icon,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                content,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ],
+          ),
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          _buildTutorialsTab(),
-          _buildDailyTipsTab(),
-          _buildQuizzesTab(),
-        ],
+    );
+  }
+
+  Widget _buildTutorialCard(Map<String, dynamic> tutorial) {
+    return Card(
+      elevation: 2,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Theme.of(context).colorScheme.secondary.withOpacity(0.05),
+              Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+            ],
+          ),
+        ),
+        child: ExpansionTile(
+          leading: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              tutorial['icon'] as IconData,
+              color: Theme.of(context).colorScheme.secondary,
+              size: 24,
+            ),
+          ),
+          title: Text(
+            tutorial['title'],
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          children: (tutorial['lessons'] as List<Map<String, dynamic>>)
+              .map((lesson) => _buildLessonCard(lesson))
+              .toList(),
+        ),
       ),
+    );
+  }
+
+  Widget _buildLessonCard(Map<String, dynamic> lesson) {
+    return FutureBuilder<bool>(
+      future: ProgressService.isVideoViewed(lesson['videoId']),
+      builder: (context, snapshot) {
+        final bool isViewed = snapshot.data ?? false;
+        
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Theme.of(context).colorScheme.surface,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: ListTile(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => VideoLessonScreen(
+                    title: lesson['title'],
+                    videoId: lesson['videoId'],
+                    description: lesson['description'],
+                    keyPoints: List<String>.from(lesson['keyPoints']),
+                    onVideoComplete: () {
+                      ProgressService.markVideoAsViewed(lesson['videoId']);
+                    },
+                  ),
+                ),
+              );
+            },
+            contentPadding: const EdgeInsets.all(16),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    lesson['title'],
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                if (isViewed)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.check_circle_outline,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Viewed',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 8),
+                Text(
+                  lesson['description'],
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.timer_outlined,
+                      size: 16,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      lesson['duration'],
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            trailing: Icon(
+              Icons.play_circle_outline,
+              color: Theme.of(context).colorScheme.primary,
+              size: 32,
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -131,51 +313,7 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
       itemCount: tutorials.length,
       itemBuilder: (context, index) {
         final tutorial = tutorials[index];
-        return Card(
-          elevation: 4,
-          margin: const EdgeInsets.only(bottom: 16),
-          child: ExpansionTile(
-            leading: Icon(
-              tutorial['icon'] as IconData,
-              color: Theme.of(context).primaryColor,
-              size: 32,
-            ),
-            title: Text(
-              tutorial['title'],
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            children: (tutorial['lessons'] as List<Map<String, dynamic>>)
-                .map((lesson) => ListTile(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => VideoLessonScreen(
-                              title: lesson['title'],
-                              videoId: lesson['videoId'],
-                              description: lesson['description'],
-                              keyPoints: List<String>.from(lesson['keyPoints']),
-                            ),
-                          ),
-                        );
-                      },
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 32,
-                        vertical: 8,
-                      ),
-                      title: Text(lesson['title']),
-                      subtitle: Text(lesson['description']),
-                      trailing: Chip(
-                        label: Text(lesson['duration']),
-                        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
-                      ),
-                    ))
-                .toList(),
-          ),
-        );
+        return _buildTutorialCard(tutorial);
       },
     );
   }
@@ -212,38 +350,6 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
     );
   }
 
-  Widget _buildTipCard(String title, String content, IconData icon) {
-    return Card(
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: Theme.of(context).primaryColor),
-                const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              content,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildQuizzesTab() {
     if (_quizzes.isEmpty) {
       return const Center(
@@ -257,7 +363,7 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
       itemBuilder: (context, index) {
         final quiz = _quizzes[index];
         return Card(
-          elevation: 4,
+          elevation: 2,
           margin: const EdgeInsets.only(bottom: 16),
           child: InkWell(
             onTap: () {
@@ -278,14 +384,11 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
                     children: [
                       Text(
                         quiz['title'],
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       Icon(
                         Icons.quiz,
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ],
                   ),
@@ -297,7 +400,7 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
                     children: [
                       Chip(
                         label: Text('${(quiz['questions'] as List).length} questions'),
-                        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                       ),
                       TextButton(
                         onPressed: () {
@@ -318,6 +421,54 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
           ),
         );
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Learn & Grow'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.bar_chart_rounded),
+            tooltip: 'View Progress',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProgressScreen(),
+                ),
+              );
+            },
+          ),
+        ],
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(
+              icon: Icon(Icons.school_outlined),
+              text: 'Tutorials',
+            ),
+            Tab(
+              icon: Icon(Icons.tips_and_updates_outlined),
+              text: 'Daily Tips',
+            ),
+            Tab(
+              icon: Icon(Icons.quiz_outlined),
+              text: 'Quizzes',
+            ),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _buildTutorialsTab(),
+          _buildDailyTipsTab(),
+          _buildQuizzesTab(),
+        ],
+      ),
     );
   }
 
