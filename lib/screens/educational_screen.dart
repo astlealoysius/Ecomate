@@ -16,6 +16,7 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
   late TabController _tabController;
   List<Map<String, dynamic>> _dailyTips = [];
   List<Map<String, dynamic>> _quizzes = [];
+  Set<int> _usedTipIndices = {};
   final Random _random = Random();
 
   @override
@@ -32,6 +33,7 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
       final Map<String, dynamic> jsonData = json.decode(jsonString);
       setState(() {
         _dailyTips = List<Map<String, dynamic>>.from(jsonData['tips']);
+        _usedTipIndices.clear(); // Reset used indices when reloading tips
       });
     } catch (e) {
       debugPrint('Error loading daily tips: $e');
@@ -50,11 +52,33 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
     }
   }
 
+  Map<String, dynamic>? _getRandomUniqueTip() {
+    if (_dailyTips.isEmpty) return null;
+    if (_usedTipIndices.length >= _dailyTips.length) {
+      // All tips have been used, reset the tracking
+      _usedTipIndices.clear();
+    }
+
+    int randomIndex;
+    do {
+      randomIndex = _random.nextInt(_dailyTips.length);
+    } while (_usedTipIndices.contains(randomIndex));
+
+    _usedTipIndices.add(randomIndex);
+    return _dailyTips[randomIndex];
+  }
+
   List<Map<String, dynamic>> _getRandomTips(int count) {
-    if (_dailyTips.isEmpty) return [];
-    final tips = List<Map<String, dynamic>>.from(_dailyTips);
-    tips.shuffle(_random);
-    return tips.take(count).toList();
+    List<Map<String, dynamic>> selectedTips = [];
+    
+    for (int i = 0; i < count; i++) {
+      final tip = _getRandomUniqueTip();
+      if (tip != null) {
+        selectedTips.add(tip);
+      }
+    }
+    
+    return selectedTips;
   }
 
   IconData _getIconData(String iconName) {
@@ -158,18 +182,33 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
 
   Widget _buildDailyTipsTab() {
     final randomTips = _getRandomTips(3);
+    
+    if (randomTips.isEmpty) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return ListView(
       padding: const EdgeInsets.all(16),
-      children: randomTips.map((tip) => Column(
-        children: [
-          _buildTipCard(
-            tip['type'] as String,
-            tip['content'] as String,
-            _getIconData(tip['icon'] as String),
-          ),
-          const SizedBox(height: 16),
-        ],
-      )).toList(),
+      children: randomTips.map((tip) {
+        // Ensure each tip has a unique type label
+        String displayType = tip['type'];
+        if (randomTips.where((t) => t['type'] == tip['type']).length > 1) {
+          displayType = '${tip['type']} #${randomTips.indexOf(tip) + 1}';
+        }
+
+        return Column(
+          children: [
+            _buildTipCard(
+              displayType,
+              tip['content'] as String,
+              _getIconData(tip['icon'] as String),
+            ),
+            const SizedBox(height: 16),
+          ],
+        );
+      }).toList(),
     );
   }
 
