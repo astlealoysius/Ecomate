@@ -15,6 +15,7 @@ import 'theme/app_theme.dart';
 import 'screens/scanner_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/report_screen.dart';
+import 'screens/educational_screen.dart';
 import 'services/auth_service.dart';
 
 Future<void> main() async {
@@ -250,6 +251,22 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const ReportScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _ActionCard(
+                          icon: Icons.school_outlined,
+                          title: 'Learn',
+                          subtitle: 'Educational content and quizzes',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const EducationalScreen(),
                               ),
                             );
                           },

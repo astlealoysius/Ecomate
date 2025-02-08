@@ -26,6 +26,9 @@ dependencies:
   google_fonts: ^6.1.0
   uuid: ^4.2.2
   cloudinary: ^1.0.0
+  video_player: ^2.8.2
+  chewie: ^1.7.5
+  youtube_player_flutter: ^9.0.0
 
 dev_dependencies:
   flutter_test:
