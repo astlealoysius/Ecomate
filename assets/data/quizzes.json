@@ -1,0 +1,574 @@
+{
+  "quizzes": [
+    {
+      "id": "recycling_basics",
+      "title": "Recycling Basics",
+      "description": "Test your knowledge about basic recycling principles",
+      "questions": [
+        {
+          "question": "Which of these items cannot be recycled?",
+          "options": [
+            "Greasy pizza boxes",
+            "Aluminum cans",
+            "Glass bottles",
+            "Cardboard boxes"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Greasy pizza boxes cannot be recycled because the grease contaminates the cardboard, making it unsuitable for recycling."
+        },
+        {
+          "question": "What does the number inside the recycling symbol indicate?",
+          "options": [
+            "Number of times it can be recycled",
+            "Type of plastic resin",
+            "Recycling priority",
+            "Manufacturing date code"
+          ],
+          "correctAnswer": 1,
+          "explanation": "The number indicates the type of plastic resin used in the product, helping recycling facilities sort materials properly."
+        },
+        {
+          "question": "Which action is most important before recycling items?",
+          "options": [
+            "Crushing them to save space",
+            "Removing labels",
+            "Cleaning them thoroughly",
+            "Sorting by color"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Cleaning items thoroughly is crucial as contaminated materials can ruin entire batches of recyclables."
+        },
+        {
+          "question": "What is 'wishcycling'?",
+          "options": [
+            "Hoping an item is recyclable and putting it in recycling",
+            "Recycling during holidays",
+            "Creating art from recycled materials",
+            "A recycling rewards program"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Wishcycling is when people put items in recycling hoping they're recyclable, which can contaminate recycling batches and cause problems."
+        },
+        {
+          "question": "Which plastic type is most commonly recycled?",
+          "options": [
+            "Type 7 (Other)",
+            "Type 1 (PET/PETE)",
+            "Type 6 (PS)",
+            "Type 3 (PVC)"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Type 1 (PET/PETE) plastics, commonly used in beverage bottles, are the most widely recycled plastic type globally."
+        },
+        {
+          "question": "What should you do with bottle caps before recycling?",
+          "options": [
+            "Always remove them",
+            "Leave them on the bottle",
+            "Recycle them separately",
+            "Throw them in trash"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Modern recycling facilities prefer caps to be left on bottles as they can now recycle them together, and loose caps can jam machinery."
+        },
+        {
+          "question": "Which common mistake reduces paper recycling quality?",
+          "options": [
+            "Removing staples",
+            "Flattening boxes",
+            "Including shredded paper",
+            "Keeping paper dry"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Shredded paper's fibers are too short for recycling and can contaminate other paper recycling."
+        },
+        {
+          "question": "What is the best way to recycle electronics?",
+          "options": [
+            "Put them in regular recycling",
+            "Take them to e-waste centers",
+            "Remove batteries and recycle separately",
+            "Break them down into parts"
+          ],
+          "correctAnswer": 1,
+          "explanation": "E-waste centers are specially equipped to handle electronic waste safely and recover valuable materials while properly disposing of hazardous components."
+        },
+        {
+          "question": "Which material has the highest recycling rate globally?",
+          "options": [
+            "Plastic",
+            "Paper",
+            "Aluminum",
+            "Glass"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Aluminum has the highest recycling rate globally because it's infinitely recyclable and has high economic value in the recycling market."
+        }
+      ]
+    },
+    {
+      "id": "composting_master",
+      "title": "Composting Master",
+      "description": "Challenge yourself with composting knowledge",
+      "questions": [
+        {
+          "question": "What is the ideal carbon to nitrogen ratio for composting?",
+          "options": [
+            "10:1",
+            "20:1",
+            "30:1",
+            "40:1"
+          ],
+          "correctAnswer": 2,
+          "explanation": "A 30:1 carbon to nitrogen ratio is ideal for efficient composting, promoting optimal microbial activity."
+        },
+        {
+          "question": "Which of these should NOT go in a compost bin?",
+          "options": [
+            "Coffee grounds",
+            "Meat and dairy",
+            "Dried leaves",
+            "Vegetable scraps"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Meat and dairy products can attract pests and create unpleasant odors in your compost."
+        },
+        {
+          "question": "What indicates that compost is ready to use?",
+          "options": [
+            "Strong ammonia smell",
+            "Visible food scraps",
+            "Dark, crumbly texture",
+            "White fuzzy growth"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Finished compost should be dark, crumbly, and smell like earth. Original materials should not be recognizable."
+        },
+        {
+          "question": "What is the 'brown to green' ratio in composting?",
+          "options": [
+            "1:1",
+            "2:1",
+            "3:1",
+            "4:1"
+          ],
+          "correctAnswer": 2,
+          "explanation": "The ideal ratio is 3:1 browns (carbon-rich) to greens (nitrogen-rich) materials for optimal decomposition."
+        },
+        {
+          "question": "Which method speeds up composting?",
+          "options": [
+            "Keeping the pile dry",
+            "Regular turning",
+            "Adding soil on top",
+            "Reducing air flow"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Regular turning of the compost pile introduces oxygen, which speeds up decomposition by supporting aerobic bacteria."
+        },
+        {
+          "question": "What's the ideal temperature range for active composting?",
+          "options": [
+            "50-70°F (10-21°C)",
+            "70-90°F (21-32°C)",
+            "130-150°F (54-66°C)",
+            "160-180°F (71-82°C)"
+          ],
+          "correctAnswer": 2,
+          "explanation": "130-150°F is the ideal temperature range for killing pathogens and weed seeds while maintaining beneficial microorganisms."
+        },
+        {
+          "question": "Which material is best for starting a new compost pile?",
+          "options": [
+            "Fresh grass clippings",
+            "Newspaper",
+            "Kitchen scraps",
+            "Aged manure"
+          ],
+          "correctAnswer": 3,
+          "explanation": "Aged manure contains beneficial bacteria and nutrients that help jump-start the composting process."
+        },
+        {
+          "question": "What role do worms play in vermicomposting?",
+          "options": [
+            "They eat harmful bacteria",
+            "They create air pockets",
+            "They break down organic matter",
+            "They add moisture"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Worms break down organic matter into nutrient-rich castings, speeding up the composting process and creating high-quality compost."
+        },
+        {
+          "question": "How can you fix a compost pile that smells bad?",
+          "options": [
+            "Add more water",
+            "Add more brown materials",
+            "Remove all food scraps",
+            "Cover it completely"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Bad odors often indicate too much nitrogen (green materials). Adding brown materials like leaves or paper helps balance the pile and reduce odors."
+        }
+      ]
+    },
+    {
+      "id": "waste_management_pro",
+      "title": "Waste Management Pro",
+      "description": "Advanced quiz about waste management",
+      "questions": [
+        {
+          "question": "Which waste management method is considered most environmentally friendly?",
+          "options": [
+            "Landfilling",
+            "Incineration",
+            "Reduction at source",
+            "Composting"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Reduction at source prevents waste creation entirely, making it the most environmentally friendly option."
+        },
+        {
+          "question": "What percentage of marine plastic pollution comes from land-based sources?",
+          "options": [
+            "20%",
+            "50%",
+            "80%",
+            "95%"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Approximately 80% of marine plastic pollution originates from land-based activities and improper waste management."
+        },
+        {
+          "question": "Which type of waste typically takes the longest to decompose?",
+          "options": [
+            "Aluminum cans",
+            "Plastic bottles",
+            "Glass bottles",
+            "Styrofoam"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Glass bottles can take up to 1 million years to decompose naturally, longer than other common waste materials."
+        },
+        {
+          "question": "What is 'zero waste'?",
+          "options": [
+            "Recycling everything",
+            "No waste to landfill",
+            "Composting all waste",
+            "Using only biodegradables"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Zero waste means designing and managing products to eliminate waste and maximize resource recovery, with no waste sent to landfills."
+        },
+        {
+          "question": "What is 'circular economy'?",
+          "options": [
+            "Recycling programs",
+            "Waste-to-energy conversion",
+            "System eliminating waste through continual use",
+            "Government waste regulations"
+          ],
+          "correctAnswer": 2,
+          "explanation": "A circular economy is an economic system aimed at eliminating waste by continually using resources through reuse, sharing, repair, refurbishment, remanufacturing and recycling."
+        },
+        {
+          "question": "Which sector typically generates the most waste globally?",
+          "options": [
+            "Construction",
+            "Manufacturing",
+            "Agriculture",
+            "Household"
+          ],
+          "correctAnswer": 0,
+          "explanation": "The construction sector typically generates the most waste globally, accounting for about 30% of total waste production."
+        },
+        {
+          "question": "What is 'waste-to-energy'?",
+          "options": [
+            "Recycling plastic into fuel",
+            "Converting waste heat to electricity",
+            "Burning waste to generate power",
+            "Using waste as fertilizer"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Waste-to-energy involves incinerating waste materials to generate electricity or heat, reducing landfill use while producing energy."
+        },
+        {
+          "question": "What is 'anaerobic digestion' in waste management?",
+          "options": [
+            "Burning waste without oxygen",
+            "Breaking down waste using bacteria without oxygen",
+            "Compressing waste underground",
+            "Filtering waste through soil"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Anaerobic digestion is a process where bacteria break down organic waste without oxygen, producing biogas and nutrient-rich digestate."
+        },
+        {
+          "question": "Which waste type is most challenging to recycle?",
+          "options": [
+            "Multi-layer packaging",
+            "Metal alloys",
+            "Colored glass",
+            "Rubber"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Multi-layer packaging (like chip bags) is difficult to recycle because separating the different material layers is complex and often not economically viable."
+        }
+      ]
+    },
+    {
+      "id": "sustainable_living",
+      "title": "Sustainable Living",
+      "description": "Test your knowledge about sustainable lifestyle choices",
+      "questions": [
+        {
+          "question": "What is a 'carbon footprint'?",
+          "options": [
+            "Physical footprints left by carbon",
+            "Total greenhouse gases from activities",
+            "Carbon dioxide in the air",
+            "Amount of walking versus driving"
+          ],
+          "correctAnswer": 1,
+          "explanation": "A carbon footprint measures the total greenhouse gas emissions caused directly and indirectly by an individual, organization, or product."
+        },
+        {
+          "question": "Which action saves the most water?",
+          "options": [
+            "Taking shorter showers",
+            "Using a dishwasher",
+            "Reducing meat consumption",
+            "Watering plants at night"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Reducing meat consumption saves the most water as animal agriculture requires massive amounts of water for feed production and processing."
+        },
+        {
+          "question": "What is 'greenwashing'?",
+          "options": [
+            "Cleaning with eco-friendly products",
+            "Misleading environmental claims",
+            "Painting buildings green",
+            "Growing vertical gardens"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Greenwashing is when companies make misleading claims about their environmental practices or products to appear more environmentally friendly."
+        },
+        {
+          "question": "Which transportation method has the lowest carbon footprint?",
+          "options": [
+            "Electric car",
+            "Hybrid car",
+            "Public bus",
+            "Bicycle"
+          ],
+          "correctAnswer": 3,
+          "explanation": "Bicycles have the lowest carbon footprint as they require no fuel and minimal resources to manufacture and maintain."
+        },
+        {
+          "question": "What is 'phantom energy'?",
+          "options": [
+            "Wind energy",
+            "Solar power at night",
+            "Power used by plugged-in devices when off",
+            "Static electricity"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Phantom energy is electricity consumed by electronic devices when they're turned off but still plugged in, wasting energy and money."
+        },
+        {
+          "question": "Which home improvement saves the most energy?",
+          "options": [
+            "LED light bulbs",
+            "Proper insulation",
+            "Energy-efficient appliances",
+            "Smart thermostat"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Proper insulation typically provides the biggest energy savings by reducing heating and cooling needs throughout the year."
+        },
+        {
+          "question": "What is 'upcycling'?",
+          "options": [
+            "Advanced recycling",
+            "Transforming waste into better products",
+            "Uphill cycling",
+            "Upgrading appliances"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Upcycling is the process of transforming waste materials or unwanted products into new materials or products of better quality or environmental value."
+        },
+        {
+          "question": "What is a 'zero-waste store'?",
+          "options": [
+            "Store that recycles everything",
+            "Store selling only package-free products",
+            "Store with no physical waste",
+            "Store that composts all waste"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Zero-waste stores allow customers to bring their own containers to purchase products without packaging, eliminating single-use packaging waste."
+        },
+        {
+          "question": "Which fabric is most sustainable?",
+          "options": [
+            "Cotton",
+            "Polyester",
+            "Organic hemp",
+            "Bamboo rayon"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Organic hemp requires minimal water, no pesticides, enriches soil, and produces strong, long-lasting fabric with minimal environmental impact."
+        }
+      ]
+    },
+    {
+      "id": "energy_conservation",
+      "title": "Energy Conservation",
+      "description": "Learn about saving energy and renewable resources",
+      "questions": [
+        {
+          "question": "What is the most energy-efficient heating system?",
+          "options": [
+            "Electric heater",
+            "Gas furnace",
+            "Ground source heat pump",
+            "Oil boiler"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Ground source heat pumps are most efficient as they use earth's constant temperature to heat and cool, requiring minimal energy input."
+        },
+        {
+          "question": "Which appliance typically uses the most energy in homes?",
+          "options": [
+            "Refrigerator",
+            "HVAC system",
+            "Water heater",
+            "Washing machine"
+          ],
+          "correctAnswer": 1,
+          "explanation": "HVAC (Heating, Ventilation, and Air Conditioning) systems typically account for the largest portion of home energy use, around 40-50%."
+        },
+        {
+          "question": "What is 'passive solar design'?",
+          "options": [
+            "Using solar panels",
+            "Designing buildings to use natural heating/cooling",
+            "Solar water heating",
+            "Solar-powered ventilation"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Passive solar design uses building orientation, materials, and features to naturally heat and cool without mechanical systems."
+        },
+        {
+          "question": "Which light bulb is most energy efficient?",
+          "options": [
+            "Incandescent",
+            "CFL",
+            "LED",
+            "Halogen"
+          ],
+          "correctAnswer": 2,
+          "explanation": "LED bulbs are most efficient, using about 75% less energy and lasting 25 times longer than traditional incandescent bulbs."
+        },
+        {
+          "question": "What is 'vampire power'?",
+          "options": [
+            "Power used at night",
+            "Excessive power usage",
+            "Standby power consumption",
+            "Power surges"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Vampire power refers to electricity consumed by devices in standby mode, which can account for up to 10% of household energy use."
+        },
+        {
+          "question": "Which window feature is best for energy efficiency?",
+          "options": [
+            "Single pane",
+            "Double pane",
+            "Triple pane with low-E coating",
+            "Tinted glass"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Triple pane windows with low-E coating provide the best insulation and UV protection, maximizing energy efficiency."
+        }
+      ]
+    },
+    {
+      "id": "climate_change",
+      "title": "Climate Change",
+      "description": "Understand global warming and its impacts",
+      "questions": [
+        {
+          "question": "What is the greenhouse effect?",
+          "options": [
+            "Growing plants in greenhouses",
+            "Gases trapping heat in atmosphere",
+            "Effect of deforestation",
+            "Solar radiation pattern"
+          ],
+          "correctAnswer": 1,
+          "explanation": "The greenhouse effect occurs when gases in Earth's atmosphere trap heat from the sun, similar to how a greenhouse works."
+        },
+        {
+          "question": "Which gas contributes most to global warming?",
+          "options": [
+            "Oxygen",
+            "Carbon dioxide",
+            "Nitrogen",
+            "Hydrogen"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Carbon dioxide (CO2) is the primary greenhouse gas responsible for global warming, mainly from burning fossil fuels."
+        },
+        {
+          "question": "What is a 'tipping point' in climate change?",
+          "options": [
+            "Peak temperature",
+            "Point of no return",
+            "Daily temperature change",
+            "Seasonal change"
+          ],
+          "correctAnswer": 1,
+          "explanation": "A tipping point is when small changes trigger a sudden and irreversible shift in Earth's climate system."
+        },
+        {
+          "question": "Which sector emits the most greenhouse gases globally?",
+          "options": [
+            "Transportation",
+            "Agriculture",
+            "Energy production",
+            "Manufacturing"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Energy production, particularly electricity and heat generation, is the largest source of greenhouse gas emissions globally."
+        },
+        {
+          "question": "What is 'ocean acidification'?",
+          "options": [
+            "Natural ocean pH cycles",
+            "Pollution in oceans",
+            "Decreasing ocean pH from CO2",
+            "Effect of ocean warming"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Ocean acidification occurs when oceans absorb CO2, making them more acidic and threatening marine ecosystems."
+        },
+        {
+          "question": "What is an 'urban heat island'?",
+          "options": [
+            "Tropical city",
+            "City warmer than surroundings",
+            "City near equator",
+            "Hot tourist destination"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Urban heat islands occur when cities are significantly warmer than surrounding areas due to human activities and infrastructure."
+        }
+      ]
+    }
+  ]
+}

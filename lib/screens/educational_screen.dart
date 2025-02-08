@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'dart:math';
 import 'video_lesson_screen.dart';
+import 'quiz_screen.dart';
 
 class EducationalScreen extends StatefulWidget {
   const EducationalScreen({Key? key}) : super(key: key);
@@ -14,6 +15,7 @@ class EducationalScreen extends StatefulWidget {
 class _EducationalScreenState extends State<EducationalScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   List<Map<String, dynamic>> _dailyTips = [];
+  List<Map<String, dynamic>> _quizzes = [];
   final Random _random = Random();
 
   @override
@@ -21,6 +23,7 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _loadDailyTips();
+    _loadQuizzes();
   }
 
   Future<void> _loadDailyTips() async {
@@ -32,6 +35,18 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
       });
     } catch (e) {
       debugPrint('Error loading daily tips: $e');
+    }
+  }
+
+  Future<void> _loadQuizzes() async {
+    try {
+      final String jsonString = await rootBundle.loadString('assets/data/quizzes.json');
+      final Map<String, dynamic> jsonData = json.decode(jsonString);
+      setState(() {
+        _quizzes = List<Map<String, dynamic>>.from(jsonData['quizzes']);
+      });
+    } catch (e) {
+      debugPrint('Error loading quizzes: $e');
     }
   }
 
@@ -191,80 +206,79 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
   }
 
   Widget _buildQuizzesTab() {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        _buildQuizCard(
-          'Recycling Basics',
-          'Test your knowledge about basic recycling principles',
-          '10 questions',
-          Colors.blue,
-        ),
-        const SizedBox(height: 16),
-        _buildQuizCard(
-          'Composting Master',
-          'Challenge yourself with composting knowledge',
-          '8 questions',
-          Colors.green,
-        ),
-        const SizedBox(height: 16),
-        _buildQuizCard(
-          'Waste Management Pro',
-          'Advanced quiz about waste management',
-          '12 questions',
-          Colors.orange,
-        ),
-      ],
-    );
-  }
+    if (_quizzes.isEmpty) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
-  Widget _buildQuizCard(String title, String description, String questions, Color color) {
-    return Card(
-      elevation: 4,
-      child: InkWell(
-        onTap: () {
-          // TODO: Navigate to quiz screen
-        },
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: _quizzes.length,
+      itemBuilder: (context, index) {
+        final quiz = _quizzes[index];
+        return Card(
+          elevation: 4,
+          margin: const EdgeInsets.only(bottom: 16),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuizScreen(quiz: quiz),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        quiz['title'],
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Icon(
+                        Icons.quiz,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ],
                   ),
-                  Icon(Icons.quiz, color: color),
+                  const SizedBox(height: 8),
+                  Text(quiz['description']),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Chip(
+                        label: Text('${(quiz['questions'] as List).length} questions'),
+                        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => QuizScreen(quiz: quiz),
+                            ),
+                          );
+                        },
+                        child: const Text('Start Quiz'),
+                      ),
+                    ],
+                  ),
                 ],
               ),
-              const SizedBox(height: 8),
-              Text(description),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Chip(
-                    label: Text(questions),
-                    backgroundColor: color.withOpacity(0.1),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      // TODO: Navigate to quiz screen
-                    },
-                    child: const Text('Start Quiz'),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

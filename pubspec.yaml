@@ -54,3 +54,4 @@ flutter:
     - .env
     - assets/
     - assets/data/daily_tips.json
+    - assets/data/quizzes.json
