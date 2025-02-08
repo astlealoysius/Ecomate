@@ -1,0 +1,365 @@
+{
+  "tips": [
+    
+    {
+      "type": "Tip of the Day",
+      "content": "Switch to rechargeable batteries to reduce hazardous waste from single-use batteries.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Over 40% of plastic produced is used just once before being discarded.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Replace disposable razors with a safety razor that uses replaceable blades.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Opt for loose-leaf tea instead of tea bags containing plastic microfibers.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "The Great Pacific Garbage Patch is twice the size of Texas and mostly consists of microplastics.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Install a water-saving showerhead to reduce water usage by up to 50%.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Use a digital grocery list app to avoid impulse buys and reduce food waste.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Producing 1kg of beef emits 60kg of CO2—equivalent to driving 160 miles.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Meal prep for the week to minimize food packaging waste and spoilage.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Choose glass or metal food storage containers over plastic ones.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "E-waste accounts for 70% of toxic waste in landfills but only 20% is recycled.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Repurpose old jars as storage containers or DIY candle holders.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Air-dry clothes instead of using a dryer to save energy.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "A dripping faucet can waste over 3,000 gallons of water annually.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Fix leaky faucets and pipes in your home this weekend.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Donate old electronics to organizations that refurbish them.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "It takes 500 years for a disposable diaper to decompose.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Try cloth diapers for babies to reduce landfill waste.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Use a broom instead of a hose to clean driveways and sidewalks.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Laundry microfiber pollution contributes to 35% of ocean microplastics.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Wash synthetic fabrics in a Guppyfriend bag to trap microfibers.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Buy secondhand furniture to reduce demand for new resources.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "The average person uses 27 gallons of water daily just for toilet flushing.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Install a dual-flush toilet or a water displacement device in your tank.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Opt for PDF tickets or mobile boarding passes to save paper.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Over 50 million tons of clothing are discarded globally each year.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Organize a clothing swap with friends or neighbors.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Use a menstrual cup or reusable pads to reduce sanitary waste.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Disposable coffee cups are lined with plastic, making them non-recyclable.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Bring a reusable coffee cup to your favorite café for discounts.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Support brands with take-back programs for old products.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Over 8 million tons of plastic enter oceans annually—equivalent to a garbage truck per minute.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Avoid products with microbeads; choose natural exfoliants like oatmeal.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Use a solar-powered charger for small devices.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "LED bulbs use 75% less energy and last 25x longer than incandescent bulbs.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Replace 5 light bulbs in your home with LEDs today.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Wrap gifts in fabric scraps or recycled newspaper.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "The carbon footprint of a single email is about 4 grams of CO2.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Unsubscribe from unnecessary email newsletters to reduce digital clutter.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Buy local produce to cut down on transportation emissions.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Food transport accounts for 11% of global food system emissions.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Join a community-supported agriculture (CSA) program.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Use a pressure cooker to reduce cooking time and energy use.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Methane from food waste in landfills is 25x more potent than CO2.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Freeze leftover vegetable scraps to make homemade broth later.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Cancel junk mail by opting out through your local postal service.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Over 100 million trees are cut down annually for junk mail.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Use a refillable pen instead of disposable plastic ones.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Host virtual meetings to reduce travel-related carbon emissions.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Aviation contributes to 2.5% of global CO2 emissions.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Offset your next flight’s carbon footprint through certified programs.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Choose powdered laundry detergent in cardboard packaging over liquid in plastic.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Only 9% of all plastic ever made has been recycled.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Write to companies urging them to adopt eco-friendly packaging.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Use a bidet attachment to reduce toilet paper consumption.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Toilet paper production uses 27,000 trees daily and massive water resources.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Switch to 100% recycled, unbleached toilet paper.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Make homemade cleaning solutions with vinegar and baking soda.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Household cleaners often contain chemicals harmful to aquatic life.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Dispose of hazardous waste (paint, batteries) at designated facilities.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Support farmers' markets to reduce food miles and packaging.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "A vegetarian diet can reduce your carbon footprint by up to 50%.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Try a meatless Monday routine to reduce meat consumption.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Use a rainwater barrel to collect water for gardening.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Lawns consume 30-60% of urban freshwater in the U.S.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Plant drought-resistant native plants in your garden.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Opt for digital magazines and books instead of print.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "The paper industry is the 5th largest energy consumer globally.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Donate old books to libraries or schools instead of trashing them.",
+      "icon": "assignment_outlined"
+    },
+    {
+      "type": "Tip of the Day",
+      "content": "Choose loose produce over pre-packaged items at the store.",
+      "icon": "lightbulb_outline"
+    },
+    {
+      "type": "Did You Know?",
+      "content": "Packaging accounts for 30% of U.S. household waste by volume.",
+      "icon": "info_outline"
+    },
+    {
+      "type": "Action Item",
+      "content": "Bring reusable mesh bags for fruits and vegetables.",
+      "icon": "assignment_outlined"
+    }
+  ]
+}

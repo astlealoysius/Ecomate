@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'dart:math';
 import 'video_lesson_screen.dart';
 
 class EducationalScreen extends StatefulWidget {
@@ -10,115 +13,46 @@ class EducationalScreen extends StatefulWidget {
 
 class _EducationalScreenState extends State<EducationalScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final List<Map<String, dynamic>> tutorials = [
-    {
-      'title': 'Recycling Basics',
-      'icon': Icons.recycling,
-      'lessons': [
-        {
-          'title': 'Why Recycle?',
-          'description': 'Discover how recycling conserves resources and reduces environmental pollution.',
-          'duration': '6 mins',
-          'videoId': 'VlRVPum9cp4',
-          'keyPoints': [
-            'Closed-loop material lifecycle',
-            'Energy savings through recycling',
-            'Reducing landfill dependence',
-            'Community impact of proper recycling',
-          ],
-        },
-        {
-          'title': 'Advanced Sorting',
-          'description': 'Deep dive into modern recycling sorting techniques and technology',
-          'duration': '4 mins',
-          'videoId': 'M7hI3sjyw8M',
-          'keyPoints': [
-            'Automated sorting systems',
-            'Optical recognition technology',
-            'Handling contaminated materials',
-            'Post-sorting quality control',
-          ],
-        },
-        {
-          'title': 'Decoding Symbols',
-          'description': 'Comprehensive guide to international recycling identification codes',
-          'duration': '5 mins',
-          'videoId': 'ZRIXqAbfjaU',
-          'keyPoints': [
-            'Resin identification codes 1-7',
-            'Glass and paper symbols',
-            'Biodegradable vs compostable labels',
-            'Global standardization efforts',
-          ],
-        },
-      ],
-    },
-    {
-      'title': 'Composting Guide',
-      'icon': Icons.eco,
-      'lessons': [
-        {
-          'title': 'Compost Science',
-          'description': 'Understand the biological processes behind effective composting',
-          'duration': '3 mins',
-          'videoId': 'oFlsjRXbnSk',
-          'keyPoints': [
-            'Carbon-nitrogen balance',
-            'Microorganism roles',
-            'Temperature phases',
-            'Aeration requirements',
-          ],
-        },
-        {
-          'title': 'Advanced Composting',
-          'description': 'Professional techniques for rapid nutrient-rich compost production',
-          'duration': '6 mins',
-          'videoId': 'kA3q07paNNE',
-          'keyPoints': [
-            'Hot composting methods',
-            'Vermicomposting setup',
-            'Troubleshooting odor issues',
-            'Compost maturity testing',
-          ],
-        },
-      ],
-    },
-    {
-      'title': 'Zero Waste Living',
-      'icon': Icons.delete_outline,
-      'lessons': [
-        {
-          'title': 'Waste Audit',
-          'description': 'Conduct a personal waste analysis and create reduction strategies',
-          'duration': '9 mins',
-          'videoId': 'GH7yy5amiGw',
-          'keyPoints': [
-            '7-day tracking method',
-            'Identifying waste patterns',
-            'Setting reduction goals',
-            'Sustainable alternatives mapping',
-          ],
-        },
-        {
-          'title': 'Bulk Shopping',
-          'description': 'Master the art of package-free grocery shopping and storage',
-          'duration': '7 mins',
-          'videoId': 'aS84qi14WWc',
-          'keyPoints': [
-            'Container preparation checklist',
-            'Store selection criteria',
-            'Quantity optimization',
-            'Long-term storage solutions',
-          ],
-        },
-      ],
-    },
-  ];
+  List<Map<String, dynamic>> _dailyTips = [];
+  final Random _random = Random();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _loadDailyTips();
+  }
+
+  Future<void> _loadDailyTips() async {
+    try {
+      final String jsonString = await rootBundle.loadString('assets/data/daily_tips.json');
+      final Map<String, dynamic> jsonData = json.decode(jsonString);
+      setState(() {
+        _dailyTips = List<Map<String, dynamic>>.from(jsonData['tips']);
+      });
+    } catch (e) {
+      debugPrint('Error loading daily tips: $e');
+    }
+  }
+
+  List<Map<String, dynamic>> _getRandomTips(int count) {
+    if (_dailyTips.isEmpty) return [];
+    final tips = List<Map<String, dynamic>>.from(_dailyTips);
+    tips.shuffle(_random);
+    return tips.take(count).toList();
+  }
+
+  IconData _getIconData(String iconName) {
+    switch (iconName) {
+      case 'lightbulb_outline':
+        return Icons.lightbulb_outline;
+      case 'info_outline':
+        return Icons.info_outline;
+      case 'assignment_outlined':
+        return Icons.assignment_outlined;
+      default:
+        return Icons.eco;
+    }
   }
 
   @override
@@ -184,7 +118,7 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
                               title: lesson['title'],
                               videoId: lesson['videoId'],
                               description: lesson['description'],
-                              keyPoints: (lesson['keyPoints'] as List<String>),
+                              keyPoints: List<String>.from(lesson['keyPoints']),
                             ),
                           ),
                         );
@@ -208,27 +142,19 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
   }
 
   Widget _buildDailyTipsTab() {
+    final randomTips = _getRandomTips(3);
     return ListView(
       padding: const EdgeInsets.all(16),
-      children: [
-        _buildTipCard(
-          'Tip of the Day',
-          'Use a reusable water bottle instead of buying plastic bottles. This small change can save hundreds of plastic bottles per year!',
-          Icons.lightbulb_outline,
-        ),
-        const SizedBox(height: 16),
-        _buildTipCard(
-          'Did You Know?',
-          'A single plastic bag can take up to 1,000 years to decompose in a landfill.',
-          Icons.info_outline,
-        ),
-        const SizedBox(height: 16),
-        _buildTipCard(
-          'Action Item',
-          'Challenge: Try going plastic-free for one week! Start by identifying all the plastic items you use daily.',
-          Icons.assignment_outlined,
-        ),
-      ],
+      children: randomTips.map((tip) => Column(
+        children: [
+          _buildTipCard(
+            tip['type'] as String,
+            tip['content'] as String,
+            _getIconData(tip['icon'] as String),
+          ),
+          const SizedBox(height: 16),
+        ],
+      )).toList(),
     );
   }
 
@@ -341,4 +267,109 @@ class _EducationalScreenState extends State<EducationalScreen> with SingleTicker
       ),
     );
   }
+
+  final List<Map<String, dynamic>> tutorials = [
+    {
+      'title': 'Recycling Basics',
+      'icon': Icons.recycling,
+      'lessons': [
+        {
+          'title': 'Why Recycle?',
+          'description': 'Discover how recycling conserves resources and reduces environmental pollution.',
+          'duration': '6 mins',
+          'videoId': 'VlRVPum9cp4',
+          'keyPoints': [
+            'Closed-loop material lifecycle',
+            'Energy savings through recycling',
+            'Reducing landfill dependence',
+            'Community impact of proper recycling',
+          ],
+        },
+        {
+          'title': 'Advanced Sorting',
+          'description': 'Deep dive into modern recycling sorting techniques and technology',
+          'duration': '4 mins',
+          'videoId': 'M7hI3sjyw8M',
+          'keyPoints': [
+            'Automated sorting systems',
+            'Optical recognition technology',
+            'Handling contaminated materials',
+            'Post-sorting quality control',
+          ],
+        },
+        {
+          'title': 'Decoding Symbols',
+          'description': 'Comprehensive guide to international recycling identification codes',
+          'duration': '5 mins',
+          'videoId': 'ZRIXqAbfjaU',
+          'keyPoints': [
+            'Resin identification codes 1-7',
+            'Glass and paper symbols',
+            'Biodegradable vs compostable labels',
+            'Global standardization efforts',
+          ],
+        },
+      ],
+    },
+    {
+      'title': 'Composting Guide',
+      'icon': Icons.eco,
+      'lessons': [
+        {
+          'title': 'Compost Science',
+          'description': 'Understand the biological processes behind effective composting',
+          'duration': '3 mins',
+          'videoId': 'oFlsjRXbnSk',
+          'keyPoints': [
+            'Carbon-nitrogen balance',
+            'Microorganism roles',
+            'Temperature phases',
+            'Aeration requirements',
+          ],
+        },
+        {
+          'title': 'Advanced Composting',
+          'description': 'Professional techniques for rapid nutrient-rich compost production',
+          'duration': '6 mins',
+          'videoId': 'kA3q07paNNE',
+          'keyPoints': [
+            'Hot composting methods',
+            'Vermicomposting setup',
+            'Troubleshooting odor issues',
+            'Compost maturity testing',
+          ],
+        },
+      ],
+    },
+    {
+      'title': 'Zero Waste Living',
+      'icon': Icons.delete_outline,
+      'lessons': [
+        {
+          'title': 'Waste Audit',
+          'description': 'Conduct a personal waste analysis and create reduction strategies',
+          'duration': '9 mins',
+          'videoId': 'GH7yy5amiGw',
+          'keyPoints': [
+            '7-day tracking method',
+            'Identifying waste patterns',
+            'Setting reduction goals',
+            'Sustainable alternatives mapping',
+          ],
+        },
+        {
+          'title': 'Bulk Shopping',
+          'description': 'Master the art of package-free grocery shopping and storage',
+          'duration': '7 mins',
+          'videoId': 'aS84qi14WWc',
+          'keyPoints': [
+            'Container preparation checklist',
+            'Store selection criteria',
+            'Quantity optimization',
+            'Long-term storage solutions',
+          ],
+        },
+      ],
+    },
+  ];
 }
