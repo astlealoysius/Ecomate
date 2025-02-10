@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('EcoMate'),
+        title: const Text('EcoMate', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
@@ -201,83 +201,101 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const MapScreen(isFullScreen: false),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _ActionCard(
-                          icon: Icons.document_scanner,
-                          title: 'Scan Waste',
-                          subtitle: 'Classify and get disposal suggestions',
-                          onTap: _showImagePickerOptions,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.white, Colors.blue.shade100],
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const MapScreen(isFullScreen: false),
+                const SizedBox(height: 20),
+                Text('Welcome to EcoMate',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold, color: Colors.black)),
+                const SizedBox(height: 10),
+                Text('Your companion for sustainable living',
+                    style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 20),
+                GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    _buildActionCard(Icons.document_scanner, 'Scan Waste',
+                        'Classify and get disposal suggestions', _showImagePickerOptions),
+                    _buildActionCard(Icons.chat_bubble_outline, 'Chat',
+                        'Ask questions about waste management', () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ChatScreen(),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _ActionCard(
-                          icon: Icons.chat_bubble_outline,
-                          title: 'Chat',
-                          subtitle: 'Ask questions about waste management',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ChatScreen(),
-                              ),
-                            );
-                          },
+                      );
+                    }),
+                    _buildActionCard(Icons.report_problem_outlined, 'Report Dumping',
+                        'Report illegal waste dumping', () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ReportScreen(),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _ActionCard(
-                          icon: Icons.report_problem_outlined,
-                          title: 'Report Dumping',
-                          subtitle: 'Report illegal waste dumping',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ReportScreen(),
-                              ),
-                            );
-                          },
+                      );
+                    }),
+                    _buildActionCard(Icons.school_outlined, 'Learn',
+                        'Educational content and quizzes', () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EducationalScreen(),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _ActionCard(
-                          icon: Icons.school_outlined,
-                          title: 'Learn',
-                          subtitle: 'Educational content and quizzes',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const EducationalScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      );
+                    }),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionCard(IconData icon, String title, String subtitle, Function onTap) {
+    return GestureDetector(
+      onTap: () => onTap(),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        elevation: 5,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 40, color: Colors.blue),
+              const SizedBox(height: 10),
+              Text(title,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 5),
+              Text(subtitle,
+                  style: const TextStyle(fontSize: 12),
+                  textAlign: TextAlign.center),
+            ],
+          ),
         ),
       ),
     );

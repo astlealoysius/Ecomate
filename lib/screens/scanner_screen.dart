@@ -55,10 +55,10 @@ class _ScannerScreenState extends State<ScannerScreen> {
       5. Environmental impact notes
 
       Format response as:
-      🗑️ Object: [name]
-      ♻️ Classification: [type]
-      🚮 Disposal: [instructions]
-      🌱 Impact: [environmental notes]
+      Object: [name]
+      Classification: [type]
+      Disposal: [instructions]
+      Impact: [environmental notes]
       """;
 
       final response = await _model.generateContent([
@@ -153,6 +153,19 @@ class _ScannerScreenState extends State<ScannerScreen> {
     );
   }
 
+  Widget _buildResultCard(String title, String content, IconData icon, Color color) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      elevation: 3,
+      child: ListTile(
+        leading: Icon(icon, color: color, size: 40),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(content.replaceFirst(RegExp(r'^\w+: '), '')),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,23 +178,34 @@ class _ScannerScreenState extends State<ScannerScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _isProcessing
-                ? const Center(child: CircularProgressIndicator())
-                : ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: _messages.length,
-                    itemBuilder: (context, index) {
-                      final message = _messages[index];
-                      return _ChatBubble(message: message);
-                    },
-                  ),
-          ),
-          _buildMessageInput(),
-        ],
-      ),
+      body: _isProcessing
+          ? const Center(child: CircularProgressIndicator())
+          : ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: _messages.map((message) {
+                final parts = message.content.split('\n');
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (message.image != null)
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(
+                          message.image!,
+                          height: 200,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    const SizedBox(height: 16),
+                    _buildResultCard('Object', parts[0], Icons.delete, Colors.blue),
+                    _buildResultCard('Classification', parts[1], Icons.recycling, Colors.green),
+                    _buildResultCard('Disposal', parts[2], Icons.delete_outline, Colors.red),
+                    _buildResultCard('Impact', parts[3], Icons.eco, Colors.brown),
+                  ],
+                );
+              }).toList(),
+            ),
     );
   }
 
@@ -272,4 +296,4 @@ class _ChatBubble extends StatelessWidget {
       ),
     );
   }
-} 
+}
