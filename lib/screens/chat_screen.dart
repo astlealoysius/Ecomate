@@ -15,6 +15,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _textController = TextEditingController();
   late final GenerativeModel _model;
   bool _isProcessing = false;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -35,82 +36,110 @@ class _ChatScreenState extends State<ChatScreen> {
   void _addWelcomeMessage() {
     _messages.add(
       ChatMessage(
-        content: "Hello! I'm your waste management assistant. Feel free to ask any questions about waste disposal, recycling, or environmental conservation.",
+        content: "👋 Hi! I'm Eco, your sustainable living assistant. I'm here to help you with any questions about waste management, recycling, and environmental conservation. How can I assist you today?",
         isUser: false,
       ),
     );
-  }
-
-  Future<void> _handleUserQuestion(String text) async {
-    if (text.trim().isEmpty) return;
-
-    setState(() {
-      _messages.add(ChatMessage(content: text, isUser: true));
-      _textController.clear();
-      _isProcessing = true;
-    });
-
-    try {
-      final response = await _model.generateContent([
-        Content.text("As a waste management expert, answer this question: $text"),
-      ]);
-
-      setState(() {
-        _messages.add(ChatMessage(
-          content: response.text ?? 'Could not generate response',
-          isUser: false,
-        ));
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: ${e.toString()}'),
-          backgroundColor: Colors.red[800],
-        ),
-      );
-    } finally {
-      setState(() => _isProcessing = false);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Waste Management Assistant'),
+        title: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.green[100],
+              child: const Icon(Icons.eco, color: Colors.green),
+            ),
+            const SizedBox(width: 10),
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Eco', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Text('Online', style: TextStyle(fontSize: 12)),
+              ],
+            ),
+          ],
+        ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final message = _messages[index];
-                return _ChatBubble(message: message);
-              },
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.green.shade50, Colors.white],
           ),
-          if (_isProcessing)
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: LinearProgressIndicator(),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: const EdgeInsets.all(8),
+                itemCount: _messages.length + (_isProcessing ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index == _messages.length && _isProcessing) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: const Offset(0, 2),
+                                  blurRadius: 4,
+                                  color: Colors.black.withOpacity(0.1),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('Eco is typing',
+                                    style: TextStyle(color: Colors.grey[600])),
+                                const SizedBox(width: 8),
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.green[300]!),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return _ChatBubble(message: _messages[index]);
+                },
+              ),
             ),
-          _buildMessageInput(),
-        ],
+            _buildMessageInput(),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildMessageInput() {
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
+            offset: const Offset(0, -2),
+            blurRadius: 4,
+            color: Colors.black.withOpacity(0.1),
           ),
         ],
       ),
@@ -119,20 +148,91 @@ class _ChatScreenState extends State<ChatScreen> {
           Expanded(
             child: TextField(
               controller: _textController,
-              decoration: const InputDecoration(
-                hintText: 'Ask a question...',
-                border: InputBorder.none,
+              decoration: InputDecoration(
+                hintText: 'Ask Eco anything about waste management...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.grey[100],
+                contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
               onSubmitted: _handleUserQuestion,
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.send, color: AppColors.primary),
-            onPressed: () => _handleUserQuestion(_textController.text),
+          const SizedBox(width: 8),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.green,
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.send, color: Colors.white),
+              onPressed: () {
+                if (_textController.text.isNotEmpty) {
+                  _handleUserQuestion(_textController.text);
+                }
+              },
+            ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _handleUserQuestion(String text) async {
+    if (text.isEmpty) return;
+
+    setState(() {
+      _messages.add(ChatMessage(content: text, isUser: true));
+      _textController.clear();
+      _isProcessing = true;
+    });
+
+    try {
+      final prompt = """
+      You are Eco, a friendly and knowledgeable waste management and environmental conservation assistant. 
+      Respond to the following question about waste management, recycling, or environmental conservation:
+      $text
+      
+      Keep your response helpful but concise. Use emojis where appropriate to make the conversation engaging.
+      """;
+
+      final response = await _model.generateContent([
+        Content.text(prompt),
+      ]);
+
+      setState(() {
+        _messages.add(
+          ChatMessage(
+            content: response.text ?? 'I apologize, but I was unable to process your request.',
+            isUser: false,
+          ),
+        );
+      });
+    } catch (e) {
+      setState(() {
+        _messages.add(
+          ChatMessage(
+            content: 'I apologize, but I encountered an error while processing your request.',
+            isUser: false,
+          ),
+        );
+      });
+    } finally {
+      setState(() {
+        _isProcessing = false;
+      });
+      // Scroll to bottom after new message
+      Future.delayed(const Duration(milliseconds: 100), () {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      });
+    }
   }
 }
 
@@ -156,11 +256,21 @@ class _ChatBubble extends StatelessWidget {
     return Align(
       alignment: message.isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.75,
+        ),
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: message.isUser ? AppColors.primary : Colors.grey[200],
-          borderRadius: BorderRadius.circular(12),
+          color: message.isUser ? Colors.green : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 2),
+              blurRadius: 4,
+              color: Colors.black.withOpacity(0.1),
+            ),
+          ],
         ),
         child: Text(
           message.content,
@@ -171,4 +281,4 @@ class _ChatBubble extends StatelessWidget {
       ),
     );
   }
-} 
+}
