@@ -9,6 +9,7 @@ import 'firebase_options.dart';
 import 'screens/map_screen.dart';
 import 'screens/auth_screen.dart';
 import 'screens/profile_screen.dart';
+import 'screens/splash_screen.dart';
 import 'screens/scanner_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/report_screen.dart';
@@ -21,10 +22,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   FirebaseDatabase.instance.databaseURL =
       'https://ecomate-64a5b-default-rtdb.firebaseio.com/';
-
   await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
@@ -37,15 +36,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: StreamBuilder<User?>(
-        stream: AuthService().authStateChanges,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return snapshot.hasData ? const HomeScreen() : const AuthScreen();
-        },
-      ),
+      home: const SplashScreen(),
+      routes: {
+        '/home': (context) => const HomeScreen(),
+        '/auth': (context) => const AuthScreen(),
+        '/profile': (context) => const ProfileScreen(),
+        '/map': (context) => const MapScreen(isFullScreen: true),
+      },
     );
   }
 }
@@ -109,6 +106,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: _authService.authStateChanges,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return snapshot.hasData ? _buildMainContent() : const AuthScreen();
+      },
+    );
+  }
+
+  Widget _buildMainContent() {
     return Scaffold(
       appBar: AppBar(
         title: const Text('EcoMate',
@@ -116,10 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfileScreen()),
-            ),
+            onPressed: () => Navigator.pushNamed(context, '/profile'),
           ),
         ],
         elevation: 0,

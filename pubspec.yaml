@@ -53,6 +53,7 @@ flutter:
   uses-material-design: true
   assets:
     - .env
-    - assets/
+    - assets/icon/app_icon.png
+    - assets/logo/logo.png
     - assets/data/daily_tips.json
     - assets/data/quizzes.json
