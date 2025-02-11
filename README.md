@@ -33,11 +33,12 @@ EcoMate is a Flutter-based mobile application that helps users manage waste resp
 - Learn about recycling best practices
 - Receive eco-friendly tips and advice
 
-### 5. User Profile
-- Personal waste management statistics
-- Report history
-- Contribution tracking
-- Account management
+### 5. Interactive Learning Hub
+- Educational videos on waste management and sustainability
+- Daily eco-facts to increase environmental awareness
+- Interactive quizzes to test knowledge
+- Progress tracking for completed lessons
+- Engaging content about recycling practices and environmental conservation
 
 ## Tech Stack
 
@@ -45,8 +46,6 @@ EcoMate is a Flutter-based mobile application that helps users manage waste resp
 - **Backend**: Firebase
   - Authentication
   - Realtime Database
-  - Cloud Storage
-  - Cloud Firestore
 - **AI/ML**: Google Gemini API
 - **Maps**: OpenStreetMap with flutter_map
 - **Location Services**: Geolocator
